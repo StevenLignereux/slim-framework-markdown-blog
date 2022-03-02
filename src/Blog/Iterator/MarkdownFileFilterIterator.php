@@ -24,14 +24,14 @@ class MarkdownFileFilterIterator extends \FilterIterator
             return false;
         }
 
-        if ($item->isDot() || !$item->isFile() || !$item->isReadable()) { ) {
+        if ($item->isDot() || !$item->isFile() || !$item->isReadable()) {
             return false;
         }
 
         if (!in_array($item->getExtension(), ['md', 'markdown'])) {
             return false;
         }
+        
+        return true;
     }
-
-    return true;
 }
