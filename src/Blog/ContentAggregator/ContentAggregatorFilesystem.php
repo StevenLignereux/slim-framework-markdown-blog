@@ -7,7 +7,7 @@ use MarkdownBlog\Entity\BlogItem;
 use Mni\FrontYAML\Document;
 use Mni\FrontYAML\Parser;
 
-class ContentAggregatorFilesystem implements ContentAgregatorInterface
+class ContentAggregatorFilesystem implements ContentAggregatorInterface
 {
     protected Parser $fileParser;
     protected MarkdownFileFilterIterator $fileIterator;
@@ -17,18 +17,18 @@ class ContentAggregatorFilesystem implements ContentAgregatorInterface
         MarkdownFileFilterIterator $fileIterator,
         Parser $fileParser
     ) {
-        $this->$fileParser = $fileParser;
+        $this->fileParser = $fileParser;
         $this->fileIterator = $fileIterator;
 
-        $this->buildItemslist();
+        $this->buildItemsList();
     }
 
     public function getItems(): array
     {
         return $this->items;
     }
-    
-    protected function buildItemslist(): void
+
+    protected function buildItemsList(): void
     {
         foreach ($this->fileIterator as $file) {
             $article = $this->buildItemFromFile($file);
@@ -45,13 +45,14 @@ class ContentAggregatorFilesystem implements ContentAgregatorInterface
                 return $article;
             }
         }
+
         return null;
     }
 
     public function buildItemFromFile(\SplFileInfo $file): ?BlogItem
     {
-        $fileContent = $file->getContents($file->getPathname());
-        $document = $this->$fileParser->parse($fileContent, false);
+        $fileContent = file_get_contents($file->getPathname());
+        $document = $this->fileParser->parse($fileContent, false);
 
         $item = new BlogItem();
         $item->populate($this->getItemData($document));
@@ -62,7 +63,7 @@ class ContentAggregatorFilesystem implements ContentAgregatorInterface
     public function getItemData(Document $document): array
     {
         return [
-            'publishDate' => $document->getYAML()['publishDate'] ?? '',
+            'publishDate' => $document->getYAML()['publish_date'] ?? '',
             'slug' => $document->getYAML()['slug'] ?? '',
             'synopsis' => $document->getYAML()['synopsis'] ?? '',
             'title' => $document->getYAML()['title'] ?? '',
