@@ -6,7 +6,7 @@ namespace MarkdownBlog\ContentAggregator;
 
 use MarkdownBlog\Entity\BlogItem;
 
-interface ContentAgregatorInterface
+interface ContentAggregatorInterface
 {
     public function findItemBySlug(string $slug): ?BlogItem;
     public function getItems(): array;
